@@ -2,10 +2,21 @@
 require_once 'auth.php';
 include 'header.php';
 
-$pdo = getDatabase();
-
-$stmt = $pdo->query("SELECT * FROM client_portfolio ORDER BY display_order ASC, created_at DESC");
-$clients = $stmt->fetchAll(PDO::FETCH_ASSOC);
+try {
+    $pdo = getDatabase();
+    // Check if table exists
+    $tableCheck = $pdo->query("SHOW TABLES LIKE 'client_portfolio'");
+    if ($tableCheck->rowCount() === 0) {
+        $_SESSION['flash_error'] = 'La tabla client_portfolio no existe. Ejecuta el schema.sql actualizado.';
+        $clients = [];
+    } else {
+        $stmt = $pdo->query("SELECT * FROM client_portfolio ORDER BY display_order ASC, created_at DESC");
+        $clients = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+} catch (Exception $e) {
+    $_SESSION['flash_error'] = 'Error de conexión: ' . $e->getMessage();
+    $clients = [];
+}
 ?>
 
 <div class="space-y-6">
