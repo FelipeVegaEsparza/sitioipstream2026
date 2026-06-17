@@ -191,29 +191,20 @@ Totalmente customizable para adaptarse a tu marca. Colores, estilos y funciones 
         $clientes_portfolio = [];
     }
     ?>
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6" data-astro-cid-j7pv25f6>
+    <div class="flex flex-wrap justify-center gap-8 md:gap-12 items-center" data-astro-cid-j7pv25f6>
       <?php if (empty($clientes_portfolio)): ?>
-        <div class="col-span-full text-center py-12" data-astro-cid-j7pv25f6>
-          <p class="text-gray-400 text-lg" data-astro-cid-j7pv25f6>Próximamente estaremos mostrando nuestros clientes aquí.</p>
-        </div>
+        <p class="text-gray-400 text-lg" data-astro-cid-j7pv25f6>Próximamente estaremos mostrando nuestros clientes aquí.</p>
       <?php else: ?>
         <?php foreach ($clientes_portfolio as $cp_item): ?>
-          <a href="<?= htmlspecialchars($cp_item['project_url'] ?: '#') ?>" target="_blank" class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100 hover:-translate-y-2" data-astro-cid-j7pv25f6>
-            <div class="aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden" data-astro-cid-j7pv25f6>
+          <a href="<?= htmlspecialchars($cp_item['project_url'] ?: '#') ?>" target="_blank" class="group flex flex-col items-center" data-astro-cid-j7pv25f6>
+            <div class="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden border-2 border-gray-200 group-hover:border-indigo-400 transition-all duration-300 shadow-md group-hover:shadow-xl group-hover:-translate-y-1 flex items-center justify-center" data-astro-cid-j7pv25f6>
               <?php if ($cp_item['image_url']): ?>
-                <img src="<?= htmlspecialchars($cp_item['image_url']) ?>" alt="<?= htmlspecialchars($cp_item['title']) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-astro-cid-j7pv25f6>
+                <img src="<?= htmlspecialchars($cp_item['image_url']) ?>" alt="<?= htmlspecialchars($cp_item['title']) ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-astro-cid-j7pv25f6>
               <?php else: ?>
-                <div class="w-full h-full flex items-center justify-center text-gray-400" data-astro-cid-j7pv25f6>
-                  <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                </div>
+                <span class="text-2xl font-bold text-gray-400">?</span>
               <?php endif; ?>
             </div>
-            <div class="p-4" data-astro-cid-j7pv25f6>
-              <h3 class="font-bold text-gray-900 text-sm text-center group-hover:text-indigo-600 transition-colors" data-astro-cid-j7pv25f6><?= htmlspecialchars($cp_item['title']) ?></h3>
-              <?php if ($cp_item['description']): ?>
-                <p class="text-xs text-gray-500 mt-1 text-center line-clamp-2" data-astro-cid-j7pv25f6><?= htmlspecialchars($cp_item['description']) ?></p>
-              <?php endif; ?>
-            </div>
+            <span class="mt-3 text-sm font-medium text-gray-600 group-hover:text-indigo-600 transition-colors text-center" data-astro-cid-j7pv25f6><?= htmlspecialchars($cp_item['title']) ?></span>
           </a>
         <?php endforeach; ?>
       <?php endif; ?>
