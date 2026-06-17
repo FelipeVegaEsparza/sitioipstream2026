@@ -10,7 +10,7 @@ services:
       DB_USER: ipstream_user
       DB_PASSWORD: 3517707aaAA@@
       DB_NAME: ipstream_db
-      SITE_URL: http://sitioipstream-app-5w71j6-553d02-212-47-73-143.traefik.me/
+      SITE_URL: https://ipstream.cl
       FLOW_API_KEY: 567F8F39-E1E2-4DC4-B2C4-7FE7A39L0990
       FLOW_SECRET_KEY: 071691ba89e4fa5ae23ed4aa9149b33b63919dcd
       ADMIN_USER: contacto@ipstream.cl
