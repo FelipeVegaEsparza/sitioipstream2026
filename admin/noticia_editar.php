@@ -2,11 +2,16 @@
 require_once 'auth.php';
 include 'header.php';
 
-$pdo = getDatabase();
+try {
+    $pdo = getDatabase();
+} catch (Exception $e) {
+    $_SESSION['flash_error'] = 'Error de conexión a la base de datos.';
+    $pdo = null;
+}
 $id = (int)($_GET['id'] ?? 0);
 $item = null;
 
-if ($id) {
+if ($id && $pdo) {
     $stmt = $pdo->prepare("SELECT * FROM news WHERE id = ?");
     $stmt->execute([$id]);
     $item = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -36,7 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $published_at = $_POST['published_at'] ?? date('Y-m-d\TH:i');
     $is_active = isset($_POST['is_active']) ? 1 : 0;
 
-    if (empty($title) || empty($content)) {
+    if (!$pdo) {
+        $_SESSION['flash_error'] = 'No se puede guardar: no hay conexión a la base de datos.';
+    } elseif (empty($title) || empty($content)) {
         $_SESSION['flash_error'] = 'El título y el contenido son obligatorios.';
     } else {
         $image_url = $image;

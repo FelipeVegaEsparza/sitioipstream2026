@@ -1,7 +1,6 @@
 <?php
 require_once 'auth.php';
 
-$pdo = getDatabase();
 requireCsrf();
 $id = (int)($_POST['id'] ?? 0);
 
@@ -12,6 +11,7 @@ if (!$id) {
 }
 
 try {
+    $pdo = getDatabase();
     $stmt = $pdo->prepare("SELECT title FROM news WHERE id = ?");
     $stmt->execute([$id]);
     $item = $stmt->fetch(PDO::FETCH_ASSOC);

@@ -2,19 +2,25 @@
 require_once 'auth.php';
 include 'header.php';
 
-$pdo = getDatabase();
+try {
+    $pdo = getDatabase();
+    $page = max(1, (int)($_GET['page'] ?? 1));
+    $per_page = 15;
+    $offset = ($page - 1) * $per_page;
 
-$page = max(1, (int)($_GET['page'] ?? 1));
-$per_page = 15;
-$offset = ($page - 1) * $per_page;
+    $countStmt = $pdo->query("SELECT COUNT(*) as total FROM news");
+    $total = $countStmt->fetch(PDO::FETCH_ASSOC)['total'];
+    $total_pages = max(1, ceil($total / $per_page));
 
-$countStmt = $pdo->query("SELECT COUNT(*) as total FROM news");
-$total = $countStmt->fetch(PDO::FETCH_ASSOC)['total'];
-$total_pages = max(1, ceil($total / $per_page));
-
-$stmt = $pdo->prepare("SELECT * FROM news ORDER BY published_at DESC LIMIT $per_page OFFSET $offset");
-$stmt->execute();
-$news = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $pdo->prepare("SELECT * FROM news ORDER BY published_at DESC LIMIT $per_page OFFSET $offset");
+    $stmt->execute();
+    $news = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $_SESSION['flash_error'] = 'Error de conexión a la base de datos.';
+    $news = [];
+    $total_pages = 0;
+    $page = 1;
+}
 ?>
 <div class="p-6">
     <div class="flex justify-between items-center mb-6">
