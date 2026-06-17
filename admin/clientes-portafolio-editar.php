@@ -2,7 +2,6 @@
 require_once 'auth.php';
 include 'header.php';
 
-$pdo = getDatabase();
 $error = null;
 $id = (int)($_GET['id'] ?? 0);
 
@@ -11,17 +10,27 @@ if (!$id) {
     exit;
 }
 
-$stmt = $pdo->prepare("SELECT * FROM client_portfolio WHERE id = ?");
-$stmt->execute([$id]);
-$client = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$client) {
-    $_SESSION['flash_error'] = 'Cliente no encontrado.';
-    header('Location: clientes-portafolio.php');
-    exit;
+try {
+    $pdo = getDatabase();
+} catch (Exception $e) {
+    $error = 'Error de conexión a la base de datos: ' . $e->getMessage();
+    $pdo = null;
+    $client = null;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($pdo) {
+    $stmt = $pdo->prepare("SELECT * FROM client_portfolio WHERE id = ?");
+    $stmt->execute([$id]);
+    $client = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$client) {
+        $_SESSION['flash_error'] = 'Cliente no encontrado.';
+        header('Location: clientes-portafolio.php');
+        exit;
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pdo) {
     requireCsrf();
     $title = trim($_POST['title'] ?? '');
     $slug = trim($_POST['slug'] ?? '');
@@ -64,6 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     <?php endif; ?>
 
+    <?php if ($client): ?>
     <form method="POST" enctype="multipart/form-data" class="bg-white rounded-2xl shadow-sm p-6 space-y-6">
         <?= csrfField() ?>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -106,6 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit" class="px-6 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Guardar Cambios</button>
         </div>
     </form>
+    <?php endif; ?>
 </div>
 
 <?php include 'footer.php'; ?>

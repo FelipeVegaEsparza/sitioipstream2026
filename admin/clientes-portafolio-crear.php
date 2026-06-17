@@ -2,10 +2,16 @@
 require_once 'auth.php';
 include 'header.php';
 
-$pdo = getDatabase();
+$pdo = null;
 $error = null;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+try {
+    $pdo = getDatabase();
+} catch (Exception $e) {
+    $error = 'Error de conexión a la base de datos: ' . $e->getMessage();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pdo) {
     requireCsrf();
     $title = trim($_POST['title'] ?? '');
     $slug = trim($_POST['slug'] ?? '');
