@@ -163,7 +163,10 @@ function render_list($news, $page, $total_pages) {
     </main>
     <footer class="bg-gradient-to-br from-gray-900 to-blue-900 text-white py-16">
         <div class="container mx-auto px-6 text-center">
-            <p class="text-blue-200">&copy; 2025 IPStream. Todos los derechos reservados.</p>
+            <?php include __DIR__ . '/../php/includes/social-icons.php'; ?>
+            <div class="mt-6">
+                <p class="text-blue-200">&copy; 2025 IPStream. Todos los derechos reservados.</p>
+            </div>
         </div>
     </footer>
 <script src="/js/trial-popup.js"></script></body>

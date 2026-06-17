@@ -231,3 +231,17 @@ INSERT IGNORE INTO `tutorial_categories` (`id`, `name`, `slug`, `color`, `displa
 (2, 'Configuración', 'configuracion', 'green', 2),
 (3, 'Streaming', 'streaming', 'purple', 3),
 (4, 'Avanzado', 'avanzado', 'orange', 4);
+
+CREATE TABLE IF NOT EXISTS `settings` (
+  `key` varchar(100) NOT NULL,
+  `value` text DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT IGNORE INTO `settings` (`key`, `value`) VALUES
+('social_facebook', '#'),
+('social_twitter', '#'),
+('social_instagram', '#'),
+('social_youtube', '#'),
+('social_tiktok', '#');

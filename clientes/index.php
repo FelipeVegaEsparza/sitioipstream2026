@@ -133,8 +133,11 @@ $page_title = 'Nuestros Clientes | IPStream';
 
     <footer class="bg-gray-900 text-gray-400 py-12">
         <div class="container mx-auto px-6 text-center">
-            <img src="/images/logos/logo.png" alt="IPStream" class="h-10 mx-auto mb-4 opacity-50">
-            <p class="text-sm">&copy; <?= date('Y') ?> IPStream. Todos los derechos reservados.</p>
+            <?php include __DIR__ . '/../php/includes/social-icons.php'; ?>
+            <div class="mt-6">
+                <img src="/images/logos/logo.png" alt="IPStream" class="h-10 mx-auto mb-4 opacity-50">
+                <p class="text-sm">&copy; <?= date('Y') ?> IPStream. Todos los derechos reservados.</p>
+            </div>
         </div>
     </footer>
 <script src="/js/trial-popup.js"></script></body>
