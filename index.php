@@ -194,9 +194,13 @@ Totalmente customizable para adaptarse a tu marca. Colores, estilos y funciones 
     ?>
     <?php if (!empty($clientes_portfolio)): ?>
     <style>
+      .carousel-wrapper {
+        mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+      }
       .carousel-track {
         display: flex;
-        gap: 4rem;
+        gap: 2.5rem;
         width: fit-content;
         animation: scroll-clients <?= max(20, $total_clientes * 6) ?>s linear infinite;
       }
@@ -208,19 +212,19 @@ Totalmente customizable para adaptarse a tu marca. Colores, estilos y funciones 
         100% { transform: translateX(-50%); }
       }
     </style>
-    <div class="overflow-hidden">
+    <div class="carousel-wrapper">
       <div class="carousel-track">
         <?php for ($i = 0; $i < 2; $i++): ?>
           <?php foreach ($clientes_portfolio as $cp_item): ?>
             <a href="<?= htmlspecialchars($cp_item['project_url'] ?: '#') ?>" target="_blank" class="group flex flex-col items-center flex-shrink-0">
-              <div class="w-36 h-36 md:w-44 md:h-44 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden border-2 border-gray-200 group-hover:border-indigo-400 transition-all duration-300 shadow-md group-hover:shadow-xl group-hover:-translate-y-1 flex items-center justify-center">
+              <div class="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden border-2 border-gray-200 group-hover:border-indigo-400 transition-all duration-300 shadow-md group-hover:shadow-xl group-hover:-translate-y-1 flex items-center justify-center">
                 <?php if ($cp_item['image_url']): ?>
                   <img src="<?= htmlspecialchars($cp_item['image_url']) ?>" alt="<?= htmlspecialchars($cp_item['title']) ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 <?php else: ?>
-                  <span class="text-3xl font-bold text-gray-400">?</span>
+                  <span class="text-lg font-bold text-gray-400">?</span>
                 <?php endif; ?>
               </div>
-              <span class="mt-3 text-sm font-medium text-gray-600 group-hover:text-indigo-600 transition-colors text-center"><?= htmlspecialchars($cp_item['title']) ?></span>
+              <span class="mt-2 text-xs font-medium text-gray-600 group-hover:text-indigo-600 transition-colors text-center"><?= htmlspecialchars($cp_item['title']) ?></span>
             </a>
           <?php endforeach; ?>
         <?php endfor; ?>
