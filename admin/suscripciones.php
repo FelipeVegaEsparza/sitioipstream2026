@@ -44,6 +44,7 @@ $query .= "
 $stmt = $pdo->prepare($query);
 $stmt->execute($params);
 $subscriptions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 
 <div class="space-y-6">
     <div class="flex flex-col md:flex-row justify-between md:items-center">

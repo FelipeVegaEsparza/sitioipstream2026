@@ -27,6 +27,7 @@ if (!$subscription) {
 $stmt_payments = $pdo->prepare("SELECT * FROM monthly_payments WHERE order_id = ? ORDER BY created_at DESC");
 $stmt_payments->execute([$subscription_id]);
 $payments = $stmt_payments->fetchAll(PDO::FETCH_ASSOC);
+?>
 
 <div class="space-y-6">
     <div>
