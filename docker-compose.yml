@@ -6,7 +6,7 @@ services:
       - 80
     environment:
       NODE_ENV: production
-      DB_HOST: 172.20.0.10
+      DB_HOST: 10.99.0.10
       DB_USER: ipstream_user
       DB_PASSWORD: 3517707aaAA@@
       DB_NAME: ipstream_db
@@ -39,14 +39,14 @@ services:
       retries: 10
     networks:
       app_net:
-        ipv4_address: 172.20.0.10
+        ipv4_address: 10.99.0.10
 
 networks:
   app_net:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.20.0.0/24
+        - subnet: 10.99.0.0/24
 
 volumes:
   mysql_data:
