@@ -185,30 +185,52 @@ Totalmente customizable para adaptarse a tu marca. Colores, estilos y funciones 
     require_once __DIR__ . '/php/config/config.php';
     try {
         $pdo_cp = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4", DB_USER, DB_PASS, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]);
-        $stmt_cp = $pdo_cp->query("SELECT title, description, image_url, project_url FROM client_portfolio WHERE is_active = 1 ORDER BY display_order ASC, created_at DESC LIMIT 5");
+        $stmt_cp = $pdo_cp->query("SELECT title, image_url, project_url FROM client_portfolio WHERE is_active = 1 ORDER BY display_order ASC, created_at DESC");
         $clientes_portfolio = $stmt_cp->fetchAll();
     } catch (Exception $e) {
         $clientes_portfolio = [];
     }
+    $total_clientes = count($clientes_portfolio);
     ?>
-    <div class="flex flex-wrap justify-center gap-8 md:gap-12 items-center" data-astro-cid-j7pv25f6>
-      <?php if (empty($clientes_portfolio)): ?>
-        <p class="text-gray-400 text-lg" data-astro-cid-j7pv25f6>Próximamente estaremos mostrando nuestros clientes aquí.</p>
-      <?php else: ?>
-        <?php foreach ($clientes_portfolio as $cp_item): ?>
-          <a href="<?= htmlspecialchars($cp_item['project_url'] ?: '#') ?>" target="_blank" class="group flex flex-col items-center" data-astro-cid-j7pv25f6>
-            <div class="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden border-2 border-gray-200 group-hover:border-indigo-400 transition-all duration-300 shadow-md group-hover:shadow-xl group-hover:-translate-y-1 flex items-center justify-center" data-astro-cid-j7pv25f6>
-              <?php if ($cp_item['image_url']): ?>
-                <img src="<?= htmlspecialchars($cp_item['image_url']) ?>" alt="<?= htmlspecialchars($cp_item['title']) ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-astro-cid-j7pv25f6>
-              <?php else: ?>
-                <span class="text-2xl font-bold text-gray-400">?</span>
-              <?php endif; ?>
-            </div>
-            <span class="mt-3 text-sm font-medium text-gray-600 group-hover:text-indigo-600 transition-colors text-center" data-astro-cid-j7pv25f6><?= htmlspecialchars($cp_item['title']) ?></span>
-          </a>
-        <?php endforeach; ?>
-      <?php endif; ?>
+    <?php if (!empty($clientes_portfolio)): ?>
+    <style>
+      .carousel-track {
+        display: flex;
+        gap: 4rem;
+        width: fit-content;
+        animation: scroll-clients <?= max(20, $total_clientes * 6) ?>s linear infinite;
+      }
+      .carousel-track:hover {
+        animation-play-state: paused;
+      }
+      @keyframes scroll-clients {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+    </style>
+    <div class="overflow-hidden">
+      <div class="carousel-track">
+        <?php for ($i = 0; $i < 2; $i++): ?>
+          <?php foreach ($clientes_portfolio as $cp_item): ?>
+            <a href="<?= htmlspecialchars($cp_item['project_url'] ?: '#') ?>" target="_blank" class="group flex flex-col items-center flex-shrink-0">
+              <div class="w-36 h-36 md:w-44 md:h-44 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden border-2 border-gray-200 group-hover:border-indigo-400 transition-all duration-300 shadow-md group-hover:shadow-xl group-hover:-translate-y-1 flex items-center justify-center">
+                <?php if ($cp_item['image_url']): ?>
+                  <img src="<?= htmlspecialchars($cp_item['image_url']) ?>" alt="<?= htmlspecialchars($cp_item['title']) ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <?php else: ?>
+                  <span class="text-3xl font-bold text-gray-400">?</span>
+                <?php endif; ?>
+              </div>
+              <span class="mt-3 text-sm font-medium text-gray-600 group-hover:text-indigo-600 transition-colors text-center"><?= htmlspecialchars($cp_item['title']) ?></span>
+            </a>
+          <?php endforeach; ?>
+        <?php endfor; ?>
+      </div>
     </div>
+    <?php else: ?>
+    <div class="text-center">
+      <p class="text-gray-400 text-lg">Próximamente estaremos mostrando nuestros clientes aquí.</p>
+    </div>
+    <?php endif; ?>
     <div class="text-center mt-12 animate-fade-in" data-astro-cid-j7pv25f6>
       <a href="/clientes" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl shadow-sm text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 group" data-astro-cid-j7pv25f6>
         <span data-astro-cid-j7pv25f6>Ver todos nuestros clientes</span>
