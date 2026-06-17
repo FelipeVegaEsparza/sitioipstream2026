@@ -10,6 +10,7 @@ $categories = $stmt_categories->fetchAll(PDO::FETCH_ASSOC);
 
 // Procesar formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    requireCsrf();
     $category_id = !empty($_POST['category_id']) ? intval($_POST['category_id']) : null;
     $plan_name = trim($_POST['plan_name'] ?? '');
     $plan_key = trim($_POST['plan_key'] ?? '');
@@ -20,26 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Procesar imagen subida
     $image_url = '';
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        // Guardar en public_html/uploads/plans/ (la raíz web)
-        $upload_dir = __DIR__ . '/../uploads/plans/';
-        
-        if (!file_exists($upload_dir)) {
-            mkdir($upload_dir, 0755, true);
-        }
-        
-        $file_extension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-        $allowed_extensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-        
-        if (in_array($file_extension, $allowed_extensions)) {
-            $file_name = uniqid('plan_') . '.' . $file_extension;
-            $file_path = $upload_dir . $file_name;
-            
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $file_path)) {
-                $image_url = '/uploads/plans/' . $file_name;
-            }
-        }
-    }
+    $image_url = uploadImage('image', 'plans') ?? $image_url;
     $monthly_price = !empty($_POST['monthly_price']) ? intval($_POST['monthly_price']) : null;
     $annual_price = !empty($_POST['annual_price']) ? intval($_POST['annual_price']) : null;
     $price = $monthly_price ?? $annual_price ?? 0; // Para compatibilidad
@@ -146,7 +128,7 @@ include 'header.php';
             </h3>
         </div>
 
-        <form method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
+        <form method="POST" enctype="multipart/form-data" class="p-6 space-y-6"><?= csrfField() ?>
             <!-- Category -->
             <div>
                 <label for="category_id" class="block text-sm font-semibold text-gray-700 mb-2">

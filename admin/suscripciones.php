@@ -45,28 +45,6 @@ $stmt = $pdo->prepare($query);
 $stmt->execute($params);
 $subscriptions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-function getStatusBadge($status) {
-    switch ($status) {
-        case 'active':
-        case 'paid':
-            return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Activo</span>';
-        case 'pending':
-            return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pendiente</span>';
-        case 'cancelled':
-            return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Cancelado</span>';
-        case 'failed':
-            return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Fallido</span>';
-        default:
-            return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">' . htmlspecialchars($status) . '</span>';
-    }
-}
-
-function formatPrice($price) {
-    return '$' . number_format($price, 0, ',', '.');
-}
-
-?>
-
 <div class="space-y-6">
     <div class="flex flex-col md:flex-row justify-between md:items-center">
         <h1 class="text-3xl font-bold text-gray-900">Suscripciones Activas</h1>

@@ -28,27 +28,6 @@ $stmt_payments = $pdo->prepare("SELECT * FROM monthly_payments WHERE order_id = 
 $stmt_payments->execute([$subscription_id]);
 $payments = $stmt_payments->fetchAll(PDO::FETCH_ASSOC);
 
-function getStatusBadge($status) {
-    switch ($status) {
-        case 'active':
-        case 'paid':
-            return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Activo</span>';
-        case 'pending':
-            return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pendiente</span>';
-        case 'cancelled':
-            return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Cancelado</span>';
-        case 'failed':
-            return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Fallido</span>';
-        default:
-            return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">' . htmlspecialchars($status) . '</span>';
-    }
-}
-
-function formatPrice($price) {
-    return '$' . number_format($price, 0, ',', '.');
-}
-?>
-
 <div class="space-y-6">
     <div>
         <a href="suscripciones.php" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">&larr; Volver a Suscripciones</a>
@@ -65,7 +44,7 @@ function formatPrice($price) {
                 <a href="registrar_pago.php?subscription_id=<?php echo htmlspecialchars($subscription['id']); ?>" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Registrar Pago
                 </a>
-                <form method="POST" action="eliminar.php" class="inline" onsubmit="return confirm('¿Eliminar permanentemente este cliente? También se eliminarán todos sus pagos registrados.')">
+                <form method="POST" action="eliminar.php" class="inline" onsubmit="return confirm('¿Eliminar permanentemente este cliente? También se eliminarán todos sus pagos registrados.')"><?= csrfField() ?>
                     <input type="hidden" name="type" value="order">
                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($subscription['id']); ?>">
                     <input type="hidden" name="redirect" value="suscripciones.php">

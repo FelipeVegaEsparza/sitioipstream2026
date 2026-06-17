@@ -24,6 +24,7 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Procesar formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    requireCsrf();
     $title = $_POST['title'] ?? '';
     $description = $_POST['description'] ?? '';
     $video_url = $_POST['video_url'] ?? '';
@@ -84,6 +85,7 @@ include 'header.php';
             <?php endif; ?>
 
             <form method="POST" class="space-y-6">
+                <?= csrfField() ?>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Título *</label>
                     <input type="text" name="title" required

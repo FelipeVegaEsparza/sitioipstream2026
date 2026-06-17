@@ -4,6 +4,7 @@ require_once __DIR__ . '/../php/config/config.php'; // Explicitly include config
 require_once __DIR__ . '/../php/config/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    requireCsrf();
     $pdo = getDatabase();
 
     $order_id = $_POST['order_id'] ?? null;

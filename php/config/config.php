@@ -15,18 +15,18 @@ if ($isDevelopment && file_exists(__DIR__ . '/config.development.php')) {
     require_once __DIR__ . '/config.development.php';
 } else {
     // Configuración de producción
-    // Las variables de entorno tienen prioridad (Dokploy), valores hardcodeados como fallback (cPanel)
+    // Usa exclusivamente variables de entorno (Dokploy). Sin fallbacks sensibles.
 
     // Flow.cl Configuration (Producción)
-    define('FLOW_API_KEY', getenv('FLOW_API_KEY') ?: '567F8F39-E1E2-4DC4-B2C4-7FE7A39L0990');
-    define('FLOW_SECRET_KEY', getenv('FLOW_SECRET_KEY') ?: '071691ba89e4fa5ae23ed4aa9149b33b63919dcd');
+    define('FLOW_API_KEY', getenv('FLOW_API_KEY'));
+    define('FLOW_SECRET_KEY', getenv('FLOW_SECRET_KEY'));
     define('FLOW_API_URL', getenv('FLOW_API_URL') ?: 'https://www.flow.cl/api');
 
     // MySQL Database Configuration (Producción)
-    define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
-    define('DB_USER', getenv('DB_USER') ?: 'ipstream_db2');
-    define('DB_PASS', getenv('DB_PASSWORD') ?: '3517707aaAA@@');
-    define('DB_NAME', getenv('DB_NAME') ?: 'ipstream_db');
+    define('DB_HOST', getenv('DB_HOST'));
+    define('DB_USER', getenv('DB_USER'));
+    define('DB_PASS', getenv('DB_PASSWORD'));
+    define('DB_NAME', getenv('DB_NAME'));
     define('DB_PORT', getenv('DB_PORT') ?: 3306);
 
     // Site Configuration
@@ -34,9 +34,9 @@ if ($isDevelopment && file_exists(__DIR__ . '/config.development.php')) {
     define('ADMIN_EMAIL', getenv('ADMIN_EMAIL') ?: 'contacto@ipstream.cl');
     define('SUPPORT_WHATSAPP', getenv('SUPPORT_WHATSAPP') ?: '+56966297436');
 
-    // Admin Credentials
-    define('ADMIN_USER', getenv('ADMIN_USER') ?: 'contacto@ipstream.cl');
-    define('ADMIN_PASS', getenv('ADMIN_PASS') ?: '3517707aaAA');
+    // Admin Credentials (solo desde env vars)
+    define('ADMIN_USER', getenv('ADMIN_USER'));
+    define('ADMIN_PASS', getenv('ADMIN_PASS'));
 
     // Configuración de errores (producción)
     error_reporting(E_ALL);

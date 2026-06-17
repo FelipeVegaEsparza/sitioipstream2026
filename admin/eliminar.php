@@ -2,6 +2,7 @@
 require_once 'auth.php';
 
 $pdo = getDatabase();
+requireCsrf();
 $type = $_POST['type'] ?? '';
 $id = (int)($_POST['id'] ?? 0);
 $redirect = $_POST['redirect'] ?? '';

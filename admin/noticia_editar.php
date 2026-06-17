@@ -27,6 +27,7 @@ $published_at = $item ? date('Y-m-d\TH:i', strtotime($item['published_at'])) : d
 $is_active = $item['is_active'] ?? 1;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    requireCsrf();
     $title = trim($_POST['title'] ?? '');
     $slug = trim($_POST['slug'] ?? '');
     $excerpt = trim($_POST['excerpt'] ?? '');
@@ -40,23 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $image_url = $image;
 
-        if (isset($_FILES['image_file']) && $_FILES['image_file']['error'] === UPLOAD_ERR_OK) {
-            $upload_dir = __DIR__ . '/../uploads/news/';
-            if (!file_exists($upload_dir)) {
-                mkdir($upload_dir, 0755, true);
-            }
-            $ext = strtolower(pathinfo($_FILES['image_file']['name'], PATHINFO_EXTENSION));
-            $allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-            if (in_array($ext, $allowed)) {
-                $file_name = uniqid('news_') . '.' . $ext;
-                if (move_uploaded_file($_FILES['image_file']['tmp_name'], $upload_dir . $file_name)) {
-                    if ($image_url && strpos($image_url, '/uploads/news/') === 0) {
-                        $old_file = __DIR__ . '/..' . $image_url;
-                        if (file_exists($old_file)) unlink($old_file);
-                    }
-                    $image_url = '/uploads/news/' . $file_name;
-                }
-            }
+        $newUrl = uploadImage('image_file', 'news', $image_url);
+        if ($newUrl) {
+            $image_url = $newUrl;
         }
 
         if (empty($slug)) {
@@ -83,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="p-6">
     <h1 class="text-2xl font-bold mb-6"><?= $id ? 'Editar' : 'Nueva' ?> Noticia</h1>
     <form method="POST" enctype="multipart/form-data" class="max-w-4xl bg-white rounded-xl shadow-lg p-6 space-y-4">
+                <?= csrfField() ?>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Título *</label>

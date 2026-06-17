@@ -8,6 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+requireCsrf();
+
 $plan_id = $_POST['plan_id'] ?? null;
 $price = $_POST['price'] ?? null;
 

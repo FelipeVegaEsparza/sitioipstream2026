@@ -34,7 +34,7 @@ $page_title = $subscription_id ? "Editar Suscripción" : "Añadir Nueva Suscripc
     </div>
 
     <div class="bg-white p-8 rounded-lg shadow-md max-w-2xl mx-auto">
-        <form action="update_suscripcion.php" method="POST" class="space-y-6">
+        <form action="update_suscripcion.php" method="POST" class="space-y-6"><?= csrfField() ?>
             <?php if ($subscription_id): ?>
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($subscription['id']); ?>">
             <?php endif; ?>

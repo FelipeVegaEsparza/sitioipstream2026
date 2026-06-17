@@ -23,10 +23,6 @@ if (!$subscription) {
     exit;
 }
 
-function formatPrice($price) {
-    return '$' . number_format($price, 0, ',', '.');
-}
-
 $default_amount = $subscription['plan_price'] ?? 0;
 $default_paid_at = date('Y-m-d H:i');
 ?>
@@ -38,7 +34,7 @@ $default_paid_at = date('Y-m-d H:i');
     </div>
 
     <div class="bg-white p-8 rounded-lg shadow-md max-w-lg mx-auto">
-        <form action="process_payment.php" method="POST" class="space-y-6">
+        <form action="process_payment.php" method="POST" class="space-y-6"><?= csrfField() ?>
             <input type="hidden" name="order_id" value="<?php echo htmlspecialchars($subscription['id']); ?>">
             
             <div class="mb-4">

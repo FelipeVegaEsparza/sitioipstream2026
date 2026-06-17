@@ -20,6 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 require_once '../php/config/config.php';
+
+// Cargar CSRF y validar
+require_once __DIR__ . '/includes/csrf.php';
+requireCsrf();
 require_once '../php/config/database.php';
 
 try {

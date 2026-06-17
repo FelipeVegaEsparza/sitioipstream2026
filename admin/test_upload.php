@@ -11,6 +11,7 @@ echo "<p><strong>¿Existe el directorio?</strong> " . (file_exists($upload_dir) 
 echo "<p><strong>¿Es escribible?</strong> " . (is_writable(dirname($upload_dir)) ? 'Sí' : 'No') . "</p>";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['test_file'])) {
+    requireCsrf();
     echo "<h2>Resultado de la subida:</h2>";
     echo "<pre>";
     print_r($_FILES['test_file']);
@@ -37,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['test_file'])) {
 ?>
 
 <form method="POST" enctype="multipart/form-data">
+<?= csrfField() ?>
     <input type="file" name="test_file" accept="image/*" required>
     <button type="submit">Subir archivo de prueba</button>
 </form>

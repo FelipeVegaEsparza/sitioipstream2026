@@ -21,6 +21,7 @@ if (!$lead) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    requireCsrf();
     $action = $_POST['action'] ?? '';
 
     if ($action === 'update_status') {
@@ -136,7 +137,7 @@ include 'header.php';
             </a>
             <h1 class="text-2xl font-bold text-gray-900"><?php echo htmlspecialchars($lead['name']); ?></h1>
         </div>
-        <form method="POST" action="eliminar.php" onsubmit="return confirm('¿Eliminar permanentemente este lead? Se perderá todo su historial.')">
+        <form method="POST" action="eliminar.php" onsubmit="return confirm('¿Eliminar permanentemente este lead? Se perderá todo su historial.')"><?= csrfField() ?>
             <input type="hidden" name="type" value="lead">
             <input type="hidden" name="id" value="<?php echo $lead['id']; ?>">
             <input type="hidden" name="redirect" value="landing-leads.php">
@@ -180,7 +181,7 @@ include 'header.php';
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
-                <form method="POST" class="mt-4 pt-4 border-t border-gray-100 flex items-center space-x-3">
+                <form method="POST" class="mt-4 pt-4 border-t border-gray-100 flex items-center space-x-3"><?= csrfField() ?>
                     <input type="hidden" name="action" value="update_status">
                     <input type="hidden" name="new_status" id="new_status_input" value="">
                     <select id="status_select" class="text-sm border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
@@ -285,6 +286,7 @@ include 'header.php';
                     <p class="text-sm text-gray-400 mb-4">Sin notas registradas.</p>
                 <?php endif; ?>
                 <form method="POST" class="space-y-3">
+                    <?= csrfField() ?>
                     <input type="hidden" name="action" value="add_note">
                     <textarea name="note" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Agregar nota interna..." required></textarea>
                     <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-gray-600 hover:bg-gray-700 transition-colors">
@@ -297,6 +299,7 @@ include 'header.php';
             <div class="bg-white rounded-2xl shadow-sm p-6" id="email-section">
                 <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Enviar Correo</h3>
                 <form method="POST" class="space-y-3">
+                    <?= csrfField() ?>
                     <input type="hidden" name="action" value="send_email">
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1">Para</label>
@@ -321,6 +324,7 @@ include 'header.php';
             <div class="bg-white rounded-2xl shadow-sm p-6">
                 <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Registrar Llamada</h3>
                 <form method="POST" class="space-y-3">
+                    <?= csrfField() ?>
                     <input type="hidden" name="action" value="log_call">
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1">Notas de la llamada</label>

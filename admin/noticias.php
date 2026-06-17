@@ -46,7 +46,7 @@ $news = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </td>
                     <td class="px-6 py-4 text-right text-sm space-x-2">
                         <a href="noticia_editar.php?id=<?= $item['id'] ?>" class="text-blue-600 hover:text-blue-800">Editar</a>
-                        <form method="POST" action="noticia_eliminar.php" class="inline" onsubmit="return confirm('¿Eliminar esta noticia?')">
+                        <form method="POST" action="noticia_eliminar.php" class="inline" onsubmit="return confirm('¿Eliminar esta noticia?')"><?= csrfField() ?>
                             <input type="hidden" name="id" value="<?= $item['id'] ?>">
                             <button type="submit" class="text-red-600 hover:text-red-800">Eliminar</button>
                         </form>

@@ -2,6 +2,7 @@
 require_once 'auth.php';
 
 $pdo = getDatabase();
+requireCsrf();
 $id = (int)($_POST['id'] ?? 0);
 
 if (!$id) {

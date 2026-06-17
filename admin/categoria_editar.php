@@ -15,6 +15,7 @@ if (!$category_id) {
 $pdo = getDatabase();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    requireCsrf();
     $name = trim($_POST['name'] ?? '');
     $slug = trim($_POST['slug'] ?? '');
     $description = trim($_POST['description'] ?? '');
@@ -94,9 +95,10 @@ $plan_count = $stmt_count->fetchColumn();
         <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
             <h3 class="text-xl font-bold text-gray-900">Información de la Categoría</h3>
         </div>
-
         <form method="POST" class="p-6 space-y-6">
-            <div>
+                <?= csrfField() ?>
+
+                <div>
                 <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">
                     Nombre *
                 </label>
