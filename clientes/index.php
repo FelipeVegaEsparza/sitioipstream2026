@@ -137,5 +137,5 @@ $page_title = 'Nuestros Clientes | IPStream';
             <p class="text-sm">&copy; <?= date('Y') ?> IPStream. Todos los derechos reservados.</p>
         </div>
     </footer>
-</body>
+<script src="/js/trial-popup.js"></script></body>
 </html>

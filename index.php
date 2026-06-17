@@ -354,4 +354,4 @@ PayPal
           });
         }
       });
-    </script> </body> </html> 
+    </script> <script src="/js/trial-popup.js"></script></body> </html> 

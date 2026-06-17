@@ -166,5 +166,5 @@ function render_list($news, $page, $total_pages) {
             <p class="text-blue-200">&copy; 2025 IPStream. Todos los derechos reservados.</p>
         </div>
     </footer>
-</body>
+<script src="/js/trial-popup.js"></script></body>
 </html>
