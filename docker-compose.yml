@@ -46,9 +46,8 @@ services:
     environment:
       PMA_HOST: 10.99.0.10
       PMA_PORT: 3306
-      PMA_USER: root
-      PMA_PASSWORD: rootpass_2024
       UPLOAD_LIMIT: 100M
+      BLOWFISH_SECRET: ipstream_secret_2026
     expose:
       - 80
     depends_on:
