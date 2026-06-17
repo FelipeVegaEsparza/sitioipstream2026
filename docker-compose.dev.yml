@@ -32,7 +32,7 @@ services:
       MYSQL_PASSWORD: ipstream_pass_2024
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./landing/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 10s

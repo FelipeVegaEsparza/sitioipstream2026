@@ -32,7 +32,7 @@ services:
       MYSQL_PASSWORD: 3517707aaAA@@
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./landing/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 10s
