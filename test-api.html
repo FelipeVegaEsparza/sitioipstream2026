@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API - IPStream</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Test de APIs - IPStream</h1>
+    <p>Esta página prueba todas las APIs del sistema para verificar que funcionen correctamente.</p>
+
+    <div class="test-section">
+        <h2>1. Test API de Planes</h2>
+        <button onclick="testPlansAPI()">Probar /php/api/get-plans.php</button>
+        <div id="plans-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Test API de Todos los Planes</h2>
+        <button onclick="testAllPlansAPI()">Probar /php/api/get-all-plans.php</button>
+        <div id="all-plans-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Test API de Plan por Key</h2>
+        <button onclick="testPlanByKeyAPI()">Probar /php/api/get-plan-by-key.php?plan_key=radio_monthly</button>
+        <div id="plan-by-key-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Test API de Tutoriales</h2>
+        <button onclick="testTutorialsAPI()">Probar /php/api/get-tutorials.php</button>
+        <div id="tutorials-result"></div>
+    </div>
+
+    <script>
+        async function testAPI(url, resultId) {
+            const resultDiv = document.getElementById(resultId);
+            resultDiv.innerHTML = '<p>⏳ Cargando...</p>';
+            
+            try {
+                console.log('Testing URL:', url);
+                const response = await fetch(url);
+                console.log('Response status:', response.status);
+                
+                const text = await response.text();
+                console.log('Response text:', text);
+                
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    throw new Error('La respuesta no es JSON válido: ' + text.substring(0, 200));
+                }
+                
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <h3>✅ API Funcionando</h3>
+                            <p><strong>URL:</strong> ${url}</p>
+                            <p><strong>Datos recibidos:</strong></p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <h3>❌ Error en la API</h3>
+                            <p><strong>URL:</strong> ${url}</p>
+                            <p><strong>Error:</strong> ${data.error || 'Error desconocido'}</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Error de Conexión</h3>
+                        <p><strong>URL:</strong> ${url}</p>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p><strong>Posibles causas:</strong></p>
+                        <ul>
+                            <li>El archivo PHP no existe en esa ruta</li>
+                            <li>Error de permisos en el servidor</li>
+                            <li>Error de sintaxis en el archivo PHP</li>
+                            <li>Credenciales de base de datos incorrectas</li>
+                        </ul>
+                    </div>
+                `;
+            }
+        }
+
+        function testPlansAPI() {
+            testAPI('/php/api/get-plans.php', 'plans-result');
+        }
+
+        function testAllPlansAPI() {
+            testAPI('/php/api/get-all-plans.php', 'all-plans-result');
+        }
+
+        function testPlanByKeyAPI() {
+            testAPI('/php/api/get-plan-by-key.php?plan_key=radio_monthly', 'plan-by-key-result');
+        }
+
+        function testTutorialsAPI() {
+            testAPI('/php/api/get-tutorials.php', 'tutorials-result');
+        }
+
+        // Auto-test al cargar la página
+        window.addEventListener('load', () => {
+            console.log('Página de test cargada. Haz clic en los botones para probar las APIs.');
+        });
+    </script>
+</body>
+</html>

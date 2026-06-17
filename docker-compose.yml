@@ -1,0 +1,56 @@
+services:
+  web:
+    image: php:8.2-cli
+    container_name: ipstream_local
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./:/var/www/html:Z
+    working_dir: /var/www/html
+    environment:
+      NODE_ENV: development
+      DB_HOST: mysql
+      DB_USER: ipstream_user
+      DB_PASSWORD: ipstream_pass_2024
+      DB_NAME: ipstream_db
+    depends_on:
+      mysql:
+        condition: service_healthy
+    command: >
+      bash -c "docker-php-ext-install pdo pdo_mysql &&
+               php -S 0.0.0.0:8000 -t /var/www/html"
+
+  mysql:
+    image: mysql:8.0
+    container_name: ipstream_mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass_2024
+      MYSQL_DATABASE: ipstream_db
+      MYSQL_USER: ipstream_user
+      MYSQL_PASSWORD: ipstream_pass_2024
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./landing/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: ipstream_pma
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: rootpass_2024
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql_data:

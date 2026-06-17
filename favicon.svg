@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Círculo exterior azul oscuro -->
+  <path d="M50 0C22.4 0 0 22.4 0 50s22.4 50 50 50 50-22.4 50-50S77.6 0 50 0zm0 90c-22.1 0-40-17.9-40-40s17.9-40 40-40 40 17.9 40 40-17.9 40-40 40z" fill="#0066CC"/>
+  
+  <!-- Arco azul claro -->
+  <path d="M85 50c0 19.3-15.7 35-35 35S15 69.3 15 50s15.7-35 35-35c9.7 0 18.5 3.9 24.7 10.3" fill="none" stroke="#40E0D0" stroke-width="10"/>
+  
+  <!-- Triángulo de play central -->
+  <path d="M40 35l30 15-30 15z" fill="#FFFFFF"/>
+</svg>

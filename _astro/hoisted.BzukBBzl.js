@@ -1,0 +1,1 @@
+import"./Layout.astro_astro_type_script_index_0_lang.C-6M4QD5.js";const r=new URLSearchParams(window.location.search),e=r.get("redirect");e&&!document.querySelector(".bg-red-100")&&setTimeout(()=>{window.location.href=e},2e3);
