@@ -212,6 +212,20 @@ INSERT IGNORE INTO `plans` (`id`, `plan_key`, `plan_name`, `price`, `title`, `ic
 (31, 'tv_profesional', 'Tv Profesional', 24990, 'Tv Profesional', '', '/uploads/plans/plan_6960579549304.png', 'Descripción', '[\"Sitio Web Profesional\",\"Seccion de Noticias, Podcast, VideoCast, Auspiciadores, Eventos, Ranking Musical, Link Redes Sociales\",\"Aplicacion PWA (Android - Iphone - PC)\",\"VdoPanel 2026\",\"30gb Almacenamiento Auto DJ\",\"Soporte Tecnico\",\"Puedes transmitir en vivo desde OBS\",\"Dominio .cl o .com $9.990 ANUALES\",\"Perfil publico en www.hostreams.com\"]', 24990, 250000, 'IVA NO Incluido - Facturación mensual, sin contratos de permanencia.', 'https://sanpedroconecta.cl/', 9, 1),
 (32, 'radio_mas_tv', 'Radio + Tv', 39990, 'Radio + Tv Online', '', '/uploads/plans/plan_696058b8eacd0.png', '', '[\"Sitio Web Profesional\",\"Seccion de Noticias, Podcast, VideoCast, Auspiciadores, Eventos, Ranking Musical, Link Redes Sociales\",\"Aplicacion PWA (Android - Iphone - PC)\",\"VdoPanel 2026 + SonicPanel 2026\",\"30gb Almacenamiento Auto DJ SonicPanel + 50Gb AutoDj VdoPanel\",\"Soporte Tecnico\",\"Puedes transmitir en vivo desde OBS, Zara Radio, Radioboss\",\"Dominio .cl o .com $9.990 ANUALES\",\"Perfil publico en www.hostreams.com\"]', 39990, 400000, 'IVA NO Incluido - Facturación mensual, sin contratos de permanencia.', 'https://sanpedroconecta.cl/', 10, 1);
 
+CREATE TABLE IF NOT EXISTS `client_portfolio` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `image_url` varchar(500) DEFAULT NULL,
+  `project_url` varchar(500) DEFAULT NULL,
+  `display_order` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 INSERT IGNORE INTO `tutorial_categories` (`id`, `name`, `slug`, `color`, `display_order`) VALUES
 (1, 'Primeros Pasos', 'primeros-pasos', 'blue', 1),
 (2, 'Configuración', 'configuracion', 'green', 2),

@@ -9,7 +9,7 @@ COPY docker/nginx.conf /etc/nginx/http.d/default.conf
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-RUN mkdir -p /var/www/html/uploads/news /var/www/html/uploads/plans \
+RUN mkdir -p /var/www/html/uploads/news /var/www/html/uploads/plans /var/www/html/uploads/portfolio \
     && chown -R www-data:www-data /var/www/html/uploads \
     && chmod -R 755 /var/www/html/uploads
 

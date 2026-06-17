@@ -38,6 +38,19 @@ try {
 
         $name = trim(($order['first_name'] ?? '') . ' ' . ($order['last_name'] ?? ''));
         $_SESSION['flash_success'] = "Cliente {$name} eliminado correctamente.";
+    } elseif ($type === 'client_portfolio') {
+        $stmt = $pdo->prepare("SELECT title, image_url FROM client_portfolio WHERE id = ?");
+        $stmt->execute([$id]);
+        $cp = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$cp) throw new Exception('Cliente no encontrado.');
+
+        if ($cp['image_url'] && str_starts_with($cp['image_url'], '/uploads/portfolio/')) {
+            $file = __DIR__ . '/..' . $cp['image_url'];
+            if (file_exists($file)) unlink($file);
+        }
+
+        $pdo->prepare("DELETE FROM client_portfolio WHERE id = ?")->execute([$id]);
+        $_SESSION['flash_success'] = "{$cp['title']} eliminado del portafolio.";
     } else {
         throw new Exception('Tipo de registro no válido.');
     }
