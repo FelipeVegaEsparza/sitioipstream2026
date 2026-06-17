@@ -1,5 +1,6 @@
 /*! tailwindcss v4.1.7 | MIT License | https://tailwindcss.com */
 .bg-opacity-20{background-color:color-mix(in srgb,var(--color-white) 20%,transparent)}
+.hover\:bg-opacity-20:hover{background-color:color-mix(in srgb,var(--color-white) 20%,transparent)}
 .hover\:bg-opacity-30:hover{background-color:color-mix(in srgb,var(--color-white) 30%,transparent)}
 .hover\:scale-105:hover{scale:1.05}
 .hover\:bg-indigo-700:hover{background-color:var(--color-indigo-700)}
