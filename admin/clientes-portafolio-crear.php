@@ -1,9 +1,8 @@
 <?php
 require_once 'auth.php';
-include 'header.php';
 
-$pdo = null;
 $error = null;
+$pdo = null;
 
 try {
     $pdo = getDatabase();
@@ -40,6 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pdo) {
         }
     }
 }
+
+include 'header.php';
 ?>
 
 <div class="space-y-6">

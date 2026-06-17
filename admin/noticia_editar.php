@@ -1,15 +1,16 @@
 <?php
 require_once 'auth.php';
-include 'header.php';
+
+$error = null;
+$pdo = null;
+$id = (int)($_GET['id'] ?? 0);
+$item = null;
 
 try {
     $pdo = getDatabase();
 } catch (Exception $e) {
-    $_SESSION['flash_error'] = 'Error de conexión a la base de datos.';
-    $pdo = null;
+    $error = 'Error de conexión a la base de datos.';
 }
-$id = (int)($_GET['id'] ?? 0);
-$item = null;
 
 if ($id && $pdo) {
     $stmt = $pdo->prepare("SELECT * FROM news WHERE id = ?");
@@ -42,9 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $is_active = isset($_POST['is_active']) ? 1 : 0;
 
     if (!$pdo) {
-        $_SESSION['flash_error'] = 'No se puede guardar: no hay conexión a la base de datos.';
+        $error = 'No se puede guardar: no hay conexión a la base de datos.';
     } elseif (empty($title) || empty($content)) {
-        $_SESSION['flash_error'] = 'El título y el contenido son obligatorios.';
+        $error = 'El título y el contenido son obligatorios.';
     } else {
         $image_url = $image;
 
@@ -60,24 +61,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $pub_ts = date('Y-m-d H:i:s', strtotime($published_at));
 
-        if ($id) {
-            $stmt = $pdo->prepare("UPDATE news SET title=?, slug=?, excerpt=?, content=?, image=?, author=?, published_at=?, is_active=? WHERE id=?");
-            $stmt->execute([$title, $slug, $excerpt, $content, $image_url, $author, $pub_ts, $is_active, $id]);
-            $_SESSION['flash_success'] = 'Noticia actualizada.';
-        } else {
-            $stmt = $pdo->prepare("INSERT INTO news (title, slug, excerpt, content, image, author, published_at, is_active) VALUES (?,?,?,?,?,?,?,?)");
-            $stmt->execute([$title, $slug, $excerpt, $content, $image_url, $author, $pub_ts, $is_active]);
-            $_SESSION['flash_success'] = 'Noticia creada.';
+        try {
+            if ($id) {
+                $stmt = $pdo->prepare("UPDATE news SET title=?, slug=?, excerpt=?, content=?, image=?, author=?, published_at=?, is_active=? WHERE id=?");
+                $stmt->execute([$title, $slug, $excerpt, $content, $image_url, $author, $pub_ts, $is_active, $id]);
+                $_SESSION['flash_success'] = 'Noticia actualizada.';
+            } else {
+                $stmt = $pdo->prepare("INSERT INTO news (title, slug, excerpt, content, image, author, published_at, is_active) VALUES (?,?,?,?,?,?,?,?)");
+                $stmt->execute([$title, $slug, $excerpt, $content, $image_url, $author, $pub_ts, $is_active]);
+                $_SESSION['flash_success'] = 'Noticia creada.';
+            }
+            header('Location: noticias.php');
+            exit;
+        } catch (Exception $e) {
+            $error = 'Error al guardar: ' . $e->getMessage();
         }
-        header('Location: noticias.php');
-        exit;
     }
 }
+
+include 'header.php';
 ?>
 <div class="p-6">
     <h1 class="text-2xl font-bold mb-6"><?= $id ? 'Editar' : 'Nueva' ?> Noticia</h1>
+
+    <?php if ($error): ?>
+        <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-lg">
+            <p class="text-sm text-red-700"><?= h($error) ?></p>
+        </div>
+    <?php endif; ?>
+
     <form method="POST" enctype="multipart/form-data" class="max-w-4xl bg-white rounded-xl shadow-lg p-6 space-y-4">
-                <?= csrfField() ?>
+        <?= csrfField() ?>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Título *</label>

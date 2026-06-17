@@ -1,8 +1,8 @@
 <?php
 require_once 'auth.php';
-include 'header.php';
 
 $error = null;
+$pdo = null;
 $id = (int)($_GET['id'] ?? 0);
 
 if (!$id) {
@@ -15,9 +15,9 @@ try {
 } catch (Exception $e) {
     $error = 'Error de conexión a la base de datos: ' . $e->getMessage();
     $pdo = null;
-    $client = null;
 }
 
+$client = null;
 if ($pdo) {
     $stmt = $pdo->prepare("SELECT * FROM client_portfolio WHERE id = ?");
     $stmt->execute([$id]);
@@ -59,6 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pdo) {
         }
     }
 }
+
+include 'header.php';
 ?>
 
 <div class="space-y-6">
