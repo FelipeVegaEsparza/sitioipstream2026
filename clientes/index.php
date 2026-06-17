@@ -47,11 +47,24 @@ $page_title = 'Nuestros Clientes | IPStream';
             <a href="/" class="flex items-center">
                 <img src="/images/logos/logo.png" alt="IPStream" class="h-10 w-auto">
             </a>
-            <nav class="hidden md:flex space-x-6">
-                <a href="/" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Inicio</a>
-                <a href="/planes" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Planes</a>
-                <a href="/clientes" class="text-blue-600 font-medium">Clientes</a>
-                <a href="/noticias" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">Noticias</a>
+            <nav class="hidden lg:flex items-center space-x-1">
+                <a href="/" class="px-3 py-2 rounded-lg text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium">Inicio</a>
+                <a href="/planes" class="px-3 py-2 rounded-lg text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium">Planes</a>
+                <a href="/caracteristicas" class="px-3 py-2 rounded-lg text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium">Características</a>
+                <div class="relative group">
+                    <button class="px-3 py-2 rounded-lg text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium flex items-center">
+                        Recursos
+                        <svg class="w-4 h-4 ml-1 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200 transform -translate-y-1 group-hover:translate-y-0 z-50">
+                        <a href="/tutoriales" class="block px-4 py-2.5 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium">Tutoriales</a>
+                        <a href="/clientes" class="block px-4 py-2.5 text-blue-600 hover:bg-blue-50 transition-colors font-medium">Clientes</a>
+                        <a href="/noticias" class="block px-4 py-2.5 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium">Noticias</a>
+                        <a href="/soporte" class="block px-4 py-2.5 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium">Soporte</a>
+                        <hr class="my-1 border-gray-100">
+                        <a href="/pago-mensual" class="block px-4 py-2.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 transition-colors text-sm">Pago Mensual</a>
+                    </div>
+                </div>
             </nav>
             <a href="/landing" class="hidden md:inline-flex items-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2 rounded-xl font-medium hover:shadow-lg transition-all">Quiero Contratar</a>
         </div>
