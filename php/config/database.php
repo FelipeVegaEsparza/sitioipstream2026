@@ -6,22 +6,30 @@ function getDatabase() {
     static $pdo = null;
     
     if ($pdo === null) {
-        try {
-            // DSN simplificado para cPanel
-            $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4";
-            
-            // Opciones básicas compatibles con cPanel
-            $options = [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci"
-            ];
-            
-            $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
-            
-        } catch (PDOException $e) {
-            error_log('Database connection failed: ' . $e->getMessage());
-            throw new Exception('Database connection failed: ' . $e->getMessage());
+        $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4";
+        
+        $options = [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci"
+        ];
+        
+        $maxRetries = 3;
+        $attempt = 0;
+        
+        while ($attempt < $maxRetries) {
+            try {
+                $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+                break;
+            } catch (PDOException $e) {
+                $attempt++;
+                if ($attempt >= $maxRetries) {
+                    error_log('Database connection failed after ' . $maxRetries . ' attempts: ' . $e->getMessage());
+                    throw new Exception('Database connection failed: ' . $e->getMessage());
+                }
+                error_log('Database connection attempt ' . $attempt . ' failed, retrying: ' . $e->getMessage());
+                sleep(1);
+            }
         }
     }
     
