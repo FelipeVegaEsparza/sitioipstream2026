@@ -52,10 +52,7 @@ require_once __DIR__ . '/../php/config/database.php';
                     <div class="flex items-center justify-center bg-white rounded-xl shadow-lg p-2">
                         <img src="/images/logos/logo.png" alt="IPStream Logo" class="h-10 w-auto">
                     </div>
-                    <div>
-                        <h1 class="text-xl font-bold text-white">IPStream</h1>
-                        <p class="text-xs text-blue-100">Panel de Administración</p>
-                    </div>
+
                 </div>
 
                 <?php if (isset($_SESSION['user_id'])): ?>

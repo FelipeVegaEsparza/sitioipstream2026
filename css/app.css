@@ -1,0 +1,43 @@
+@import "tailwindcss";
+@source "../admin/";
+@source "../php/";
+
+@utility bg-opacity-20 {
+    background-color: color-mix(in srgb, currentColor 20%, transparent);
+}
+
+@utility hover\:scale-105 {
+    &:hover { scale: 1.05; }
+}
+
+@utility hover\:bg-indigo-700 {
+    &:hover { background-color: var(--color-indigo-700); }
+}
+
+@utility hover\:bg-indigo-800 {
+    &:hover { background-color: var(--color-indigo-800); }
+}
+
+@utility focus\:outline-none {
+    &:focus { outline: 2px solid transparent; outline-offset: 2px; }
+}
+
+@utility focus\:ring-2 {
+    &:focus { --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color); --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color); box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000); }
+}
+
+@utility focus\:ring-indigo-500 {
+    &:focus { --tw-ring-color: var(--color-indigo-500); }
+}
+
+@utility focus\:ring-offset-2 {
+    &:focus { --tw-ring-offset-width: 2px; }
+}
+
+@utility focus\:border-indigo-500 {
+    &:focus { border-color: var(--color-indigo-500); }
+}
+
+@utility focus\:ring-indigo-600 {
+    &:focus { --tw-ring-color: var(--color-indigo-600); }
+}
