@@ -1,31 +1,34 @@
 <?php
 require_once __DIR__ . '/../php/config/config.php';
+require_once __DIR__ . '/../php/config/database.php';
 
 $clients = [];
 $page = 1;
 $total_pages = 1;
+$dbError = null;
 
 try {
-    $pdo = new PDO(
-        "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
-        DB_USER,
-        DB_PASS,
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]
-    );
+    $pdo = getDatabase();
 
-    $page = max(1, (int)($_GET['page'] ?? 1));
-    $per_page = 20;
-    $offset = ($page - 1) * $per_page;
+    $tableCheck = $pdo->query("SHOW TABLES LIKE 'client_portfolio'");
+    if ($tableCheck->rowCount() === 0) {
+        $dbError = 'La tabla client_portfolio no existe.';
+    } else {
+        $page = max(1, (int)($_GET['page'] ?? 1));
+        $per_page = 20;
+        $offset = ($page - 1) * $per_page;
 
-    $countStmt = $pdo->query("SELECT COUNT(*) as total FROM client_portfolio WHERE is_active = 1");
-    $total = $countStmt->fetch(PDO::FETCH_ASSOC)['total'];
-    $total_pages = max(1, ceil($total / $per_page));
+        $countStmt = $pdo->query("SELECT COUNT(*) as total FROM client_portfolio WHERE is_active = 1");
+        $total = $countStmt->fetch(PDO::FETCH_ASSOC)['total'];
+        $total_pages = max(1, ceil($total / $per_page));
 
-    $stmt = $pdo->prepare("SELECT title, description, image_url, project_url FROM client_portfolio WHERE is_active = 1 ORDER BY display_order ASC, created_at DESC LIMIT ? OFFSET ?");
-    $stmt->execute([$per_page, $offset]);
-    $clients = $stmt->fetchAll();
+        $stmt = $pdo->prepare("SELECT title, description, image_url, project_url FROM client_portfolio WHERE is_active = 1 ORDER BY display_order ASC, created_at DESC LIMIT ? OFFSET ?");
+        $stmt->execute([$per_page, $offset]);
+        $clients = $stmt->fetchAll();
+    }
 } catch (Exception $e) {
-    error_log("Error en clientes/index.php: " . $e->getMessage());
+    $dbError = $e->getMessage();
+    error_log("Error en clientes/index.php: " . $dbError);
 }
 
 $page_title = 'Nuestros Clientes | IPStream';
@@ -96,7 +99,14 @@ $page_title = 'Nuestros Clientes | IPStream';
 
         <section class="py-16">
             <div class="container mx-auto px-6">
-                <?php if (empty($clients)): ?>
+                <?php if ($dbError): ?>
+                    <div class="text-center py-20">
+                        <svg class="mx-auto h-20 w-20 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                        <h2 class="mt-6 text-2xl font-bold text-gray-900">Error de conexión</h2>
+                        <p class="mt-2 text-red-500"><?= htmlspecialchars($dbError) ?></p>
+                        <p class="mt-2 text-gray-500">Contacta al administrador del sitio.</p>
+                    </div>
+                <?php elseif (empty($clients)): ?>
                     <div class="text-center py-20">
                         <svg class="mx-auto h-20 w-20 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                         <h2 class="mt-6 text-2xl font-bold text-gray-900">Próximamente</h2>
