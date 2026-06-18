@@ -23,7 +23,9 @@ try {
         $total_pages = max(1, ceil($total / $per_page));
 
         $stmt = $pdo->prepare("SELECT title, description, image_url, project_url FROM client_portfolio WHERE is_active = 1 ORDER BY display_order ASC, created_at DESC LIMIT ? OFFSET ?");
-        $stmt->execute([$per_page, $offset]);
+        $stmt->bindValue(1, $per_page, PDO::PARAM_INT);
+        $stmt->bindValue(2, $offset, PDO::PARAM_INT);
+        $stmt->execute();
         $clients = $stmt->fetchAll();
     }
 } catch (Exception $e) {
