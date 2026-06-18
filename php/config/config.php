@@ -47,9 +47,11 @@ if ($isDevelopment && file_exists(__DIR__ . '/config.development.php')) {
     // Timezone
     date_default_timezone_set('America/Santiago');
 
-    // Headers de seguridad
-    header('X-Content-Type-Options: nosniff');
-    header('X-Frame-Options: DENY');
-    header('X-XSS-Protection: 1; mode=block');
+    // Headers de seguridad (solo si no se ha enviado output)
+    if (!headers_sent()) {
+        header('X-Content-Type-Options: nosniff');
+        header('X-Frame-Options: DENY');
+        header('X-XSS-Protection: 1; mode=block');
+    }
 }
 ?>
