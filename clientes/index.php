@@ -35,8 +35,10 @@ $page_title = 'Nuestros Clientes | IPStream';
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://ipstream.cl/clientes/">
     <title><?= htmlspecialchars($page_title) ?></title>
-    <meta name="description" content="Conoce los proyectos y clientes que confían en IPStream para su radio online." />
+    <meta name="description" content="Conoce los proyectos de radio online creados con IPStream. Clientes y casos de éxito de nuestra plataforma de streaming." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -48,6 +50,14 @@ $page_title = 'Nuestros Clientes | IPStream';
         .animate-fade-in { opacity: 0; animation: fadeIn 0.8s ease-out forwards; }
         @keyframes fadeIn { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
     </style>
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_CL">
+    <meta property="og:site_name" content="IPStream - Tu Radio Online">
+    <meta property="og:title" content="Clientes - IPStream">
+    <meta property="og:description" content="Conoce los proyectos de radio online creados con IPStream.">
+    <meta property="og:url" content="https://ipstream.cl/clientes/">
+    <meta property="og:image" content="https://ipstream.cl/images/logos/logo.png">
+    <meta name="twitter:card" content="summary_large_image">
 </head>
 <body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
     <header class="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">

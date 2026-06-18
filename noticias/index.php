@@ -28,6 +28,7 @@ if ($slug) {
         $imgUrl = $article['image'] ?? '';
         $og['image'] = $imgUrl ? (str_starts_with($imgUrl, 'http') ? $imgUrl : 'https://' . $_SERVER['HTTP_HOST'] . '/' . ltrim($imgUrl, '/')) : '';
         $og['url'] = 'https://' . $_SERVER['HTTP_HOST'] . '/noticias/?slug=' . urlencode($article['slug']);
+        $og['type'] = 'article';
     }
 } else {
     $page = max(1, (int)($_GET['page'] ?? 1));
@@ -44,6 +45,11 @@ if ($slug) {
 
     $page_title = 'Noticias | IPStream - Tu Radio Online';
     $page_content = render_list($news, $page, $total_pages);
+    $og['title'] = $page_title;
+    $og['description'] = 'Noticias, actualizaciones y consejos sobre IPStream - Tu plataforma de radio online.';
+    $og['url'] = 'https://' . $_SERVER['HTTP_HOST'] . '/noticias/';
+    $og['image'] = 'https://' . $_SERVER['HTTP_HOST'] . '/images/logos/logo.png';
+    $og['type'] = 'website';
 }
 
 function render_article($a) {
@@ -131,6 +137,7 @@ function render_list($news, $page, $total_pages) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
     <title><?= $page_title ?></title>
     <meta name="description" content="<?= $og['description'] ?? 'Noticias, actualizaciones y consejos sobre IPStream - Tu plataforma de radio online.' ?>">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -139,7 +146,7 @@ function render_list($news, $page, $total_pages) {
     <meta property="og:description" content="<?= $og['description'] ?>">
     <meta property="og:image" content="<?= $og['image'] ?>">
     <meta property="og:url" content="<?= $og['url'] ?>">
-    <meta property="og:type" content="article">
+    <meta property="og:type" content="<?= $og['type'] ?? 'website' ?>">
     <meta property="og:site_name" content="IPStream">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="<?= $og['title'] ?>">
@@ -160,6 +167,9 @@ function render_list($news, $page, $total_pages) {
         .prose img { border-radius: 0.75rem; margin: 1.5rem 0; }
         .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     </style>
+    <?php if (!$slug): ?>
+    <link rel="canonical" href="https://ipstream.cl/noticias/">
+    <?php endif; ?>
 </head>
 <body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
     <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-2 px-4 text-center text-sm">

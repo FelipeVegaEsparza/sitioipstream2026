@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /api/
+Disallow: /php/
+Disallow: /uploads/
+Disallow: /flow-simulator/
+Disallow: /test-checkout/
+Disallow: /planes-old/
+Disallow: /pago-mensual-old/
+Disallow: /ip3.zip
+Disallow: /dist/
+Disallow: /css/
+Disallow: /js/
+Disallow: /_astro/
+
+Sitemap: https://ipstream.cl/sitemap.xml
