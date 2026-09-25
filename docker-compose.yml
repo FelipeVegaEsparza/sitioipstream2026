@@ -13,8 +13,8 @@ services:
       SITE_URL: https://ipstream.cl
       FLOW_API_KEY: 567F8F39-E1E2-4DC4-B2C4-7FE7A39L0990
       FLOW_SECRET_KEY: 071691ba89e4fa5ae23ed4aa9149b33b63919dcd
-      ADMIN_USER: contacto@ipstream.cl
-      ADMIN_PASS: 3517707aaAA
+      ADMIN_USER: ${ADMIN_USER}
+      ADMIN_PASS: ${ADMIN_PASS}
       MIGRATION_TOKEN: 3eefabc5e8d07ba41403e222af9ffb319f629ebd9c3760d1
     volumes:
       - uploads_data:/var/www/html/uploads

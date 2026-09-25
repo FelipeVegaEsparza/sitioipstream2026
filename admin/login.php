@@ -18,7 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     // Check credentials
-    if ($username === ADMIN_USER && $password === ADMIN_PASS) {
+    if (empty(ADMIN_USER) || empty(ADMIN_PASS)) {
+        $error = 'El panel no está configurado: faltan las variables ADMIN_USER y ADMIN_PASS.';
+    } elseif ($username === ADMIN_USER && $password === ADMIN_PASS) {
         session_regenerate_id(true);
         $_SESSION['user_id'] = 'admin';
         $_SESSION['fingerprint'] = $_SERVER['REMOTE_ADDR'] . '|' . ($_SERVER['HTTP_USER_AGENT'] ?? '');
