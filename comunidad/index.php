@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../php/config/config.php';
 require_once __DIR__ . '/../php/config/database.php';
 
-$clients = [];
+$radios = [];
 $page = 1;
 $total_pages = 1;
 $dbError = null;
@@ -10,30 +10,30 @@ $dbError = null;
 try {
     $pdo = getDatabase();
 
-    $tableCheck = $pdo->query("SHOW TABLES LIKE 'client_portfolio'");
+    $tableCheck = $pdo->query("SHOW TABLES LIKE 'community_radios'");
     if ($tableCheck->rowCount() === 0) {
-        $dbError = 'La tabla client_portfolio no existe.';
+        $dbError = 'La tabla community_radios no existe.';
     } else {
         $page = max(1, (int)($_GET['page'] ?? 1));
-        $per_page = 20;
+        $per_page = 24;
         $offset = ($page - 1) * $per_page;
 
-        $countStmt = $pdo->query("SELECT COUNT(*) as total FROM client_portfolio WHERE is_active = 1");
+        $countStmt = $pdo->query("SELECT COUNT(*) as total FROM community_radios WHERE is_active = 1");
         $total = $countStmt->fetch(PDO::FETCH_ASSOC)['total'];
         $total_pages = max(1, ceil($total / $per_page));
 
-        $stmt = $pdo->prepare("SELECT title, description, image_url, project_url FROM client_portfolio WHERE is_active = 1 ORDER BY display_order ASC, created_at DESC LIMIT ? OFFSET ?");
+        $stmt = $pdo->prepare("SELECT name, description, logo_url, site_url FROM community_radios WHERE is_active = 1 ORDER BY display_order ASC, created_at DESC LIMIT ? OFFSET ?");
         $stmt->bindValue(1, $per_page, PDO::PARAM_INT);
         $stmt->bindValue(2, $offset, PDO::PARAM_INT);
         $stmt->execute();
-        $clients = $stmt->fetchAll();
+        $radios = $stmt->fetchAll();
     }
 } catch (Exception $e) {
     $dbError = $e->getMessage();
-    error_log("Error en clientes/index.php: " . $dbError);
+    error_log("Error en comunidad/index.php: " . $dbError);
 }
 
-$page_title = 'Nuestros Clientes | IPStream';
+$page_title = 'Comunidad | IPStream';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -41,9 +41,9 @@ $page_title = 'Nuestros Clientes | IPStream';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://ipstream.cl/clientes/">
+    <link rel="canonical" href="https://ipstream.cl/comunidad/">
     <title><?= htmlspecialchars($page_title) ?></title>
-    <meta name="description" content="Conoce los proyectos de radio online creados con IPStream. Clientes y casos de éxito de nuestra plataforma de streaming." />
+    <meta name="description" content="Descubre las radios de nuestros clientes que transmiten con IPStream. Explora la comunidad y visita sus sitios." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -51,18 +51,21 @@ $page_title = 'Nuestros Clientes | IPStream';
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Outfit', sans-serif; }
-        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
         .animate-fade-in { opacity: 0; animation: fadeIn 0.8s ease-out forwards; }
         @keyframes fadeIn { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
     </style>
     <meta property="og:type" content="website">
     <meta property="og:locale" content="es_CL">
     <meta property="og:site_name" content="IPStream - Tu Radio Online">
-    <meta property="og:title" content="Clientes - IPStream">
-    <meta property="og:description" content="Conoce los proyectos de radio online creados con IPStream.">
-    <meta property="og:url" content="https://ipstream.cl/clientes/">
+    <meta property="og:title" content="Comunidad - IPStream">
+    <meta property="og:description" content="Descubre las radios de nuestros clientes que transmiten con IPStream.">
+    <meta property="og:url" content="https://ipstream.cl/comunidad/">
     <meta property="og:image" content="https://ipstream.cl/images/logos/logo.png">
     <meta name="twitter:card" content="summary_large_image">
+    <style>
+        .nav-dropdown { display: none; }
+        .nav-group:hover .nav-dropdown { display: block; }
+    </style>
 </head>
 <body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
     <header class="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
@@ -77,7 +80,7 @@ $page_title = 'Nuestros Clientes | IPStream';
 <a href="/tutoriales" class="nav-link px-3 py-2 rounded-lg text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium flex items-center"><svg class="w-4 h-4 mr-1.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Tutoriales</a>
 <a href="/noticias" class="nav-link px-3 py-2 rounded-lg text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium flex items-center"><svg class="w-4 h-4 mr-1.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>Noticias</a>
 <div class="relative nav-group">
-<button class="nav-link px-3 py-2 rounded-lg text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium flex items-center"><svg class="w-4 h-4 mr-1.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>Más<svg class="w-3.5 h-3.5 ml-1 transition-transform duration-200 chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+<button class="nav-link px-3 py-2 rounded-lg text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium flex items-center"><svg class="w-4 h-4 mr-1.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>Más<svg class="w-3.5 h-3.5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
 </button>
 <div class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 nav-dropdown z-50">
 <a href="/comunidad" class="block px-4 py-2.5 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium flex items-center"><svg class="w-4 h-4 mr-2 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>Comunidad</a>
@@ -93,10 +96,10 @@ $page_title = 'Nuestros Clientes | IPStream';
     </header>
 
     <main class="flex-grow">
-        <section class="py-20 bg-gradient-to-br from-blue-600 to-indigo-700 text-white">
+        <section class="py-20 bg-gradient-to-br from-indigo-600 to-purple-700 text-white">
             <div class="container mx-auto px-6 text-center">
-                <h1 class="text-4xl md:text-5xl font-bold mb-4">Nuestros Clientes</h1>
-                <p class="text-xl text-blue-100 max-w-2xl mx-auto">Proyectos que transmiten con IPStream y confían en nuestra plataforma.</p>
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Comunidad</h1>
+                <p class="text-xl text-indigo-100 max-w-2xl mx-auto">Las radios de nuestros clientes que transmiten con IPStream. Visita sus sitios y descúbrelas.</p>
             </div>
         </section>
 
@@ -109,32 +112,36 @@ $page_title = 'Nuestros Clientes | IPStream';
                         <p class="mt-2 text-red-500"><?= htmlspecialchars($dbError) ?></p>
                         <p class="mt-2 text-gray-500">Contacta al administrador del sitio.</p>
                     </div>
-                <?php elseif (empty($clients)): ?>
+                <?php elseif (empty($radios)): ?>
                     <div class="text-center py-20">
-                        <svg class="mx-auto h-20 w-20 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        <svg class="mx-auto h-20 w-20 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                         <h2 class="mt-6 text-2xl font-bold text-gray-900">Próximamente</h2>
-                        <p class="mt-2 text-gray-500">Estaremos mostrando nuestros clientes aquí.</p>
+                        <p class="mt-2 text-gray-500">Estaremos mostrando las radios de nuestra comunidad aquí.</p>
                     </div>
                 <?php else: ?>
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                        <?php foreach ($clients as $c): ?>
-                            <a href="<?= htmlspecialchars($c['project_url'] ?: '#') ?>" target="_blank" class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100 hover:-translate-y-2">
-                                <div class="aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
-                                    <?php if ($c['image_url']): ?>
-                                        <img src="<?= htmlspecialchars($c['image_url']) ?>" alt="<?= htmlspecialchars($c['title']) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <?php foreach ($radios as $r): ?>
+                            <div class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100 hover:-translate-y-2 flex flex-col">
+                                <div class="aspect-video bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-6">
+                                    <?php if ($r['logo_url']): ?>
+                                        <img src="<?= htmlspecialchars($r['logo_url']) ?>" alt="<?= htmlspecialchars($r['name']) ?>" class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500">
                                     <?php else: ?>
-                                        <div class="w-full h-full flex items-center justify-center text-gray-400">
-                                            <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                                        <div class="text-gray-400">
+                                            <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                                         </div>
                                     <?php endif; ?>
                                 </div>
-                                <div class="p-4">
-                                    <h3 class="font-bold text-gray-900 text-sm text-center group-hover:text-indigo-600 transition-colors"><?= htmlspecialchars($c['title']) ?></h3>
-                                    <?php if ($c['description']): ?>
-                                        <p class="text-xs text-gray-500 mt-1 text-center line-clamp-2"><?= htmlspecialchars($c['description']) ?></p>
+                                <div class="p-5 flex flex-col flex-grow">
+                                    <h3 class="font-bold text-gray-900 text-lg"><?= htmlspecialchars($r['name']) ?></h3>
+                                    <?php if ($r['description']): ?>
+                                        <p class="text-sm text-gray-500 mt-2 line-clamp-3 flex-grow"><?= htmlspecialchars($r['description']) ?></p>
                                     <?php endif; ?>
+                                    <a href="<?= htmlspecialchars($r['site_url'] ?: '#') ?>" target="_blank" rel="noopener" class="mt-4 inline-flex items-center justify-center w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2.5 rounded-xl font-medium hover:shadow-lg transition-all">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                        Visitar sitio
+                                    </a>
                                 </div>
-                            </a>
+                            </div>
                         <?php endforeach; ?>
                     </div>
 

@@ -51,6 +51,19 @@ try {
 
         $pdo->prepare("DELETE FROM client_portfolio WHERE id = ?")->execute([$id]);
         $_SESSION['flash_success'] = "{$cp['title']} eliminado del portafolio.";
+    } elseif ($type === 'community_radio') {
+        $stmt = $pdo->prepare("SELECT name, logo_url FROM community_radios WHERE id = ?");
+        $stmt->execute([$id]);
+        $radio = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$radio) throw new Exception('Radio no encontrada.');
+
+        if ($radio['logo_url'] && str_starts_with($radio['logo_url'], '/uploads/community/')) {
+            $file = __DIR__ . '/..' . $radio['logo_url'];
+            if (file_exists($file)) unlink($file);
+        }
+
+        $pdo->prepare("DELETE FROM community_radios WHERE id = ?")->execute([$id]);
+        $_SESSION['flash_success'] = "{$radio['name']} eliminada de la comunidad.";
     } else {
         throw new Exception('Tipo de registro no válido.');
     }
