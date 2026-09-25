@@ -91,7 +91,10 @@ $page_title = 'Comunidad | IPStream';
 </div>
 </div>
 </nav>
-            <a href="/landing" class="hidden md:inline-flex items-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2 rounded-xl font-medium hover:shadow-lg transition-all">Quiero Contratar</a>
+            <div class="flex items-center space-x-3">
+                <a href="https://panelipstream.cl/" class="hidden md:inline-flex items-center bg-white text-blue-600 hover:bg-blue-50 px-5 py-2 rounded-xl font-medium shadow-lg transition-all">Ingresar</a>
+                <a href="/landing" class="hidden md:inline-flex items-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2 rounded-xl font-medium hover:shadow-lg transition-all">Quiero Contratar</a>
+            </div>
         </div>
     </header>
 
